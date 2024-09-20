@@ -8,21 +8,17 @@ include 'templates/head.php';
 <body>
     <?
     include 'templates/header.php';
-    ?>
+    include 'repositories/coches/CochesRepositoryRAM.php';
 
-    <?
-    include 'clases/Coche.php';
+    $cochesRepository = new CochesRepositoryRAM();
 
-    $coche1 = new Coche('1234ABC', 'Seat', 'Ibiza', 100000);
-    $coche2 = new Coche('5678DEF', 'Renault', 'Clio', 200000);
-    $coche3 = new Coche('9876GHI', 'Ford', 'Focus', 300000);
-    $coches = [$coche1, $coche2, $coche3];
 
     $matricula = $_GET['matricula'];
     $cocheRecibido = new Coche($_POST['matricula'], $_POST['marca'], $_POST['modelo'], $_POST['kilometros']);
     if ($cocheRecibido->getMatricula() != null && $cocheRecibido->getMarca() != null && $cocheRecibido->getModelo() != null && $cocheRecibido->getKm() != null) {
-        array_push($coches, $cocheRecibido);
+        $cochesRepository->saveCoche($cocheRecibido);
     }
+    $coches = $cochesRepository->getCoches();
 
     if ($matricula) {
         echo '<ul>';
